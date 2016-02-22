@@ -109,6 +109,3 @@ function redrawBalls() {
 }
 
 animationHandle = setInterval(redrawBalls, frameDuration);
-
-// To stop animation
-//clearInterval(animationHandle);
