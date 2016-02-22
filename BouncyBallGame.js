@@ -1,18 +1,11 @@
 var bouncyBallsCanvas = document.getElementById("bouncy-ball");
 var canvasContext = bouncyBallsCanvas.getContext("2d");
 var balls = [];
-var firstBall = {
-    positionX:150,
-    positionY:150,
-    velocityX:100,
-    velocityY:100,
-    radius:10,
-    color:"#00FF00"
-};
-balls.push(firstBall);
 
 var frameDuration = 30; // temporal duration of one frame in milliseconds
 
+bouncyBallsCanvas.onclick = addBall;
+HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
 function relMouseCoords(event) {
     var totalOffsetX = 0;
     var totalOffsetY = 0;
@@ -29,13 +22,11 @@ function relMouseCoords(event) {
     canvasX = event.pageX - totalOffsetX;
     canvasY = event.pageY - totalOffsetY;
 
-    return {x:canvasX, y:canvasY}
+    return {X:canvasX, Y:canvasY}
 }
-HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
 
 function addBall(event) {
-    alert("in addBall()");
-    coords = canvas.relMouseCoords(event);
+    coords = bouncyBallsCanvas.relMouseCoords(event);
     var newBall = {
         positionX:coords.X,
         positionY:coords.Y,
@@ -46,8 +37,6 @@ function addBall(event) {
     };
     balls.push(newBall);
 }
-
-bouncyBallsCanvas.onclick = addBall;
 
 function animateBalls() {
     for (i = 0; i < balls.length; i++) {
