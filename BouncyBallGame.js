@@ -1,6 +1,12 @@
 var bouncyBallsCanvas = document.getElementById("bouncy-ball");
 var canvasContext = bouncyBallsCanvas.getContext("2d");
 var balls = [];
+var colorQueue = [
+    "#095903",
+    "#ED5407",
+    "#032459",
+    "#590303"
+];
 
 var frameDuration = 30; // temporal duration of one frame in milliseconds
 
@@ -28,13 +34,15 @@ function relMouseCoords(event) {
 function addBall(event) {
     coords = bouncyBallsCanvas.relMouseCoords(event);
     var newDirection = Math.random() * 2 * Math.PI;
+    var newColor = colorQueue.shift();
+    colorQueue.push(newColor);
     var newBall = {
         positionX:coords.X,
         positionY:coords.Y,
         velocityX:100 * Math.cos(newDirection),
         velocityY:100 * Math.sin(newDirection),
         radius:10,
-        color:"#00FF00"
+        color:newColor
     };
     balls.push(newBall);
 }
