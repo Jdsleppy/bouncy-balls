@@ -27,11 +27,12 @@ function relMouseCoords(event) {
 
 function addBall(event) {
     coords = bouncyBallsCanvas.relMouseCoords(event);
+    var newDirection = Math.random() * 2 * Math.PI;
     var newBall = {
         positionX:coords.X,
         positionY:coords.Y,
-        velocityX:50,
-        velocityY:50,
+        velocityX:100 * Math.cos(newDirection),
+        velocityY:100 * Math.sin(newDirection),
         radius:10,
         color:"#00FF00"
     };
