@@ -57,25 +57,25 @@ function animateBall(ball) {
 		var deltaX = ball.velocityX * (frameDuration / 1000);
     var deltaY = ball.velocityY * (frameDuration / 1000);
     // x movement and bounce
-    if ((ball.positionX + deltaX) < 0) {
-        ball.positionX = 0;
+    if ((ball.positionX + deltaX - ball.radius) < 0) {
+        ball.positionX = ball.radius;
         ball.velocityX *= -1;
     }
-    else if ((ball.positionX + deltaX) < bouncyBallsCanvas.width) {
+    else if ((ball.positionX + deltaX + ball.radius) < bouncyBallsCanvas.width) {
         ball.positionX += deltaX;
     } else {
-        ball.positionX = bouncyBallsCanvas.width;
+        ball.positionX = bouncyBallsCanvas.width - ball.radius;
         ball.velocityX *= -1;
     }
     // y movement and bounce
-    if ((ball.positionY + deltaY) < 0) {
-        ball.positionY = 0;
+    if ((ball.positionY + deltaY - ball.radius) < 0) {
+        ball.positionY = ball.radius;
         ball.velocityY *= -1;
     }
-    else if ((ball.positionY + deltaY) < bouncyBallsCanvas.height) {
+    else if ((ball.positionY + deltaY + ball.radius) < bouncyBallsCanvas.height) {
         ball.positionY += deltaY;
     } else {
-        ball.positionY = bouncyBallsCanvas.height;
+        ball.positionY = bouncyBallsCanvas.height - ball.radius;
         ball.velocityY *= -1;
     }
 }
