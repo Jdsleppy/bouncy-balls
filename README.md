@@ -8,7 +8,7 @@ Just include the script into a page and decorate a `canvas` with the `bouncy-bal
 <script src="BouncyBallGame.js"></script>
 ```
 
-... then click on the canvas to get going.  See the code for a more complete example which is [on display here](http://www.joelsleppy.com/portfolio/bouncy-ball-game/ "Bouncy-Balls example").
+... then click on the canvas to get going.  See the code for a more complete example which is [on display here](https://www.joelsleppy.com/bouncyBallGame.html "Bouncy-Balls example").
 
 #### Wishlist
 1. ~~Make the game resistant to canvas resizing.~~
