@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "allowJs": false,
+        "alwaysStrict": true,
+        "checkJs": false
+    },
+    "files": [
+        "BouncyBallGame.ts",
+    ]
+}

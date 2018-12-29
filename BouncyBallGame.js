@@ -1,111 +1,100 @@
-var bouncyBallsCanvas = document.getElementById("bouncy-ball");
-var canvasContext = bouncyBallsCanvas.getContext("2d");
+"use strict";
+var Vector = (function () {
+    function Vector(X, Y) {
+        this.X = X;
+        this.Y = Y;
+    }
+    return Vector;
+}());
+var Ball = (function () {
+    function Ball(position, velocity, radius, color) {
+        this.position = position;
+        this.velocity = velocity;
+        this.radius = radius;
+        this.color = color;
+    }
+    return Ball;
+}());
+var ColorPicker = (function () {
+    function ColorPicker(colors) {
+        this.colors = colors;
+    }
+    ColorPicker.prototype.next = function () {
+        var color = this.colors.shift();
+        this.colors.push(color);
+        return color;
+    };
+    return ColorPicker;
+}());
 var balls = [];
-var colorQueue = [
+var colorPicker = new ColorPicker([
     "#095903",
     "#ED5407",
     "#032459",
     "#590303"
-];
-
-var frameDuration = 30; // temporal duration of one frame in milliseconds
-
-bouncyBallsCanvas.onclick = addBall;
-HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
-function relMouseCoords(event) {
+]);
+var frameDurationMs = 15;
+var bouncyBallsCanvas = document.getElementById("bouncy-ball");
+var canvasContext = bouncyBallsCanvas.getContext("2d");
+bouncyBallsCanvas.onclick = function (ev) {
+    var newBall = new Ball(eventCoordsOnElement(ev, bouncyBallsCanvas), newBallVelocity(), 5 + (Math.random() * 15), colorPicker.next());
+    balls.push(newBall);
+};
+function eventCoordsOnElement(ev, elem) {
     var totalOffsetX = 0;
     var totalOffsetY = 0;
-    var canvasX = 0;
-    var canvasY = 0;
-    var currentElement = this;
-
+    var currentElement = elem;
     do {
         totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
         totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-    }
-    while(currentElement = currentElement.offsetParent)
-
-    canvasX = event.pageX - totalOffsetX;
-    canvasY = event.pageY - totalOffsetY;
-
-    return {X:canvasX, Y:canvasY}
+    } while (currentElement = currentElement.offsetParent);
+    var canvasX = ev.pageX - totalOffsetX;
+    var canvasY = ev.pageY - totalOffsetY;
+    return new Vector(canvasX, canvasY);
 }
-
-function addBall(event) {
-    coords = bouncyBallsCanvas.relMouseCoords(event);
-    var newDirection = Math.random() * 2 * Math.PI;
-    var newColor = colorQueue.shift();
-    colorQueue.push(newColor);
-    var newBall = {
-        positionX:coords.X,
-        positionY:coords.Y,
-        velocityX:100 * Math.cos(newDirection),
-        velocityY:100 * Math.sin(newDirection),
-        radius:10,
-        color:newColor
-    };
-    balls.push(newBall);
+function newBallVelocity() {
+    var initialSpeed = (bouncyBallsCanvas.width + bouncyBallsCanvas.height) / 8;
+    var splay = 0.5 + Math.random();
+    var speed = initialSpeed * splay;
+    var direction = Math.random() * 2 * Math.PI;
+    return new Vector(speed * Math.cos(direction), speed * Math.sin(direction));
 }
-
-function animateBalls() {
-    for (i = 0; i < balls.length; i++) {
-        animateBall(balls[i]);
-    }
-}
-
 function animateBall(ball) {
-		var deltaX = ball.velocityX * (frameDuration / 1000);
-    var deltaY = ball.velocityY * (frameDuration / 1000);
-    // x movement and bounce
-    if ((ball.positionX + deltaX - ball.radius) < 0) {
-        ball.positionX = ball.radius;
-        ball.velocityX *= -1;
+    var deltaX = ball.velocity.X * (frameDurationMs / 1000);
+    var deltaY = ball.velocity.Y * (frameDurationMs / 1000);
+    if ((ball.position.X + deltaX - ball.radius) < 0) {
+        ball.position.X = ball.radius;
+        ball.velocity.X *= -1;
     }
-    else if ((ball.positionX + deltaX + ball.radius) < bouncyBallsCanvas.width) {
-        ball.positionX += deltaX;
-    } else {
-        ball.positionX = bouncyBallsCanvas.width - ball.radius;
-        ball.velocityX *= -1;
+    else if ((ball.position.X + deltaX + ball.radius) < bouncyBallsCanvas.width) {
+        ball.position.X += deltaX;
     }
-    // y movement and bounce
-    if ((ball.positionY + deltaY - ball.radius) < 0) {
-        ball.positionY = ball.radius;
-        ball.velocityY *= -1;
+    else {
+        ball.position.X = bouncyBallsCanvas.width - ball.radius;
+        ball.velocity.X *= -1;
     }
-    else if ((ball.positionY + deltaY + ball.radius) < bouncyBallsCanvas.height) {
-        ball.positionY += deltaY;
-    } else {
-        ball.positionY = bouncyBallsCanvas.height - ball.radius;
-        ball.velocityY *= -1;
+    if ((ball.position.Y + deltaY - ball.radius) < 0) {
+        ball.position.Y = ball.radius;
+        ball.velocity.Y *= -1;
     }
-}
-
-function drawBalls() {
-    for (i = 0; i < balls.length; i++) {
-        drawBall(balls[i]);
+    else if ((ball.position.Y + deltaY + ball.radius) < bouncyBallsCanvas.height) {
+        ball.position.Y += deltaY;
+    }
+    else {
+        ball.position.Y = bouncyBallsCanvas.height - ball.radius;
+        ball.velocity.Y *= -1;
     }
 }
-
 function drawBall(ball) {
     canvasContext.beginPath();
-    canvasContext.arc(
-        ball.positionX,
-        ball.positionY,
-        ball.radius,
-        0, 2 * Math.PI);
-    canvasContext.fillStyle=ball.color;
+    canvasContext.arc(ball.position.X, ball.position.Y, ball.radius, 0, 2 * Math.PI);
+    canvasContext.fillStyle = ball.color;
     canvasContext.fill();
     canvasContext.closePath();
 }
-
 function redrawBalls() {
-    canvasContext.clearRect(
-        0,
-        0,
-        bouncyBallsCanvas.width,
-        bouncyBallsCanvas.height);
-    animateBalls();
-    drawBalls();
+    canvasContext.clearRect(0, 0, bouncyBallsCanvas.width, bouncyBallsCanvas.height);
+    balls.forEach(animateBall);
+    balls.forEach(drawBall);
 }
-
-animationHandle = setInterval(redrawBalls, frameDuration);
+var animationHandle = setInterval(redrawBalls, frameDurationMs);

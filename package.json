@@ -1,0 +1,22 @@
+{
+  "name": "bouncy-balls",
+  "version": "1.0.0",
+  "description": "Easily decorate an HTML canvas with a bouncy ball mini-game.",
+  "main": "BouncyBallGame.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jdsleppy/bouncy-balls.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jdsleppy/bouncy-balls/issues"
+  },
+  "homepage": "https://github.com/Jdsleppy/bouncy-balls#readme",
+  "devDependencies": {
+    "typescript": "^3.2.2"
+  }
+}
