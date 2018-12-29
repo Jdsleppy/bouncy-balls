@@ -13,5 +13,5 @@ Just include the script into a page and decorate a `canvas` with the `bouncy-bal
 #### Wishlist
 1. ~~Make the game resistant to canvas resizing.~~
 2. ~~Respect ball radius in boundary collisions.~~
-3. Scale the ball speed to better match canvas size?
+3. ~~Scale the ball speed to better match canvas size?~~
 4. Ball-on-ball collisions?!?!
